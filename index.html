@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Interactivo de Estudiantes</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- D3.js y Plotly.js -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+</head>
+<body>
+  <div id="container">
+    <aside id="sidebar">
+      <h2>Filtros</h2>
+      <p>Utiliza los siguientes filtros para explorar los datos:</p>
+      <p style="text-align: justify;">(Si deseas seleccionar varios dentro de una misma categoría: command + click en los que quieras)</p>
+      <div id="filters">
+        <!-- Aquí se insertan los filtros dinámicamente -->
+      </div>
+      <button id="reset-btn">Reset filtros</button>
+    </aside>
+    <main id="main-content">
+      <section id="project-authors" style="background: #e6f0fa; border-radius: 10px; padding: 18px 24px; margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
+        <h2 style="margin-top: 0; color: #2563eb;">Autores del Proyecto</h2>
+        <ul style="list-style: disc inside; margin: 0; padding-left: 1em;">
+          <li>Isaac David Sánchez Sánchez – T00067613</li>
+          <li>Luis Mario Diaz Martinez – T00069220</li>
+          <li>Maria Valentina Serna Gonzalez – T00067756</li>
+        </ul>
+      </section>
+      <section id="dashboard-info" style="background: #f8fafc; border-radius: 10px; padding: 24px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <h2 style="margin-top: 0; color: #2d3748;">Acerca de los Datos y el Dashboard</h2>
+        <p>
+          <strong>Origen y estructura de los datos:</strong><br>
+          Este dashboard utiliza el conjunto de datos <em>"Higher Education Students Performance Evaluation"</em>, recolectado en 2019 de estudiantes de la Facultad de Ingeniería y la Facultad de Ciencias de la Educación. La fuente original está disponible en plataformas de datos abiertos. El dataset incluye variables clave como <b>GRADE</b> (calificación final), <b>CGPA</b> (promedio acumulado), <b>educación de los padres</b>, <b>tipo de escuela</b>, <b>beca</b>, <b>asistencia</b>, <b>horas de estudio</b>, <b>sexo</b>, <b>edad</b>, <b>nivel socioeconómico</b>, entre otras. La cobertura geográfica corresponde a una universidad en Turquía.
+        </p>
+        <p>
+          <strong>Tipos de análisis disponibles y su utilidad:</strong><br>
+          El dashboard ofrece análisis descriptivos y comparativos mediante gráficos de barras, cajas, violines, heatmaps, diagramas de paralelas y gráficos de dispersión. Estos permiten explorar la distribución de calificaciones, el impacto de factores socioeconómicos y familiares, la relación entre hábitos de estudio y desempeño, y patrones de correlación entre variables. Así, se facilita la identificación de factores asociados al éxito académico y posibles desigualdades.
+        </p>
+        <p>
+          <strong>Relevancia práctica de las visualizaciones:</strong><br>
+          Las visualizaciones permiten transformar datos complejos en información clara y accionable. Son herramientas clave para la toma de decisiones en el ámbito educativo, el diseño de políticas públicas y la divulgación científica. Por ejemplo, ayudan a identificar grupos en riesgo, evaluar el impacto de becas o actividades extracurriculares, y comunicar hallazgos a directivos, docentes y responsables de políticas educativas.
+        </p>
+      </section>
+      <div class="chart-container">
+        <h3>Distribución de GRADE</h3>
+        <div id="grade-bar"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Expected CGPA por Educación Parental</h3>
+        <select id="box-group-select">
+          <option value="Mother's education">Mother's education</option>
+          <option value="Father's education">Father's education</option>
+        </select>
+        <div id="cgpa-box"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Heatmap de Correlaciones</h3>
+        <div id="corr-heatmap"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Distribución de CGPA por Sexo (Violin Plot)</h3>
+        <div id="cgpa-violin-sex"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Relación entre Beca, Tipo de Escuela y GRADE</h3>
+        <div id="parallel-categories"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Asistencia a Seminarios vs. GRADE</h3>
+        <div id="seminar-grade-heatmap"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Lectura científica por Sexo y Beca</h3>
+        <div id="stacked-bar"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Promedio de CGPA por Tipo de Escuela</h3>
+        <div id="cgpa-schooltype"></div>
+      </div>
+      <div class="chart-row" style="display: flex; gap: 24px; justify-content: space-between; align-items: stretch;">
+        <div class="chart-container" style="flex: 1 1 0; min-width: 0;">
+          <h3>Proporción de Estudiantes con y sin Pareja</h3>
+          <div id="partner-pie"></div>
+        </div>
+        <div class="chart-container" style="flex: 1 1 0; min-width: 0;">
+          <h3>Distribución de Estudiantes por Estado Civil de los Padres</h3>
+          <div id="parent-marital-pie"></div>
+        </div>
+        <div class="chart-container" style="flex: 1 1 0; min-width: 0;">
+          <h3>Distribución de Estudiantes por Medio de Transporte</h3>
+          <div id="transport-pie"></div>
+        </div>
+      </div>
+      <div class="chart-container">
+        <h3>Relación entre Horas de Estudio y CGPA</h3>
+        <div id="studyhours-cgpa-scatter"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Distribución de GRADE por Beca</h3>
+        <div id="scholarship-grade-bar"></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-container" style="flex: 1; margin-right: 10px;">
+          <h3>Asistencia a Clases vs. CGPA</h3>
+          <div id="attendance-cgpa"></div>
+        </div>
+        <div class="chart-container" style="flex: 1; margin-left: 10px;">
+          <h3>Promedio de CGPA por Actividad Extracurricular</h3>
+          <div id="cgpa-extracurricular"></div>
+        </div>
+      </div>>
+      <div class="chart-container">
+        <h3>Promedio de CGPA por Nivel Socioeconómico</h3>
+        <div id="cgpa-socioeconomic"></div>
+      </div>
+      <div class="chart-container">
+        <h3>Relación entre Edad y CGPA</h3>
+        <div id="age-cgpa"></div>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
